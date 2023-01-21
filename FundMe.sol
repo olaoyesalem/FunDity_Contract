@@ -10,8 +10,6 @@ pragma solidity ^0.8.7;
  
 contract CrowdFund{
 
-// get who funded the most
-
 address immutable i_owner;
 uint256 constant MINIMUM_USD = 1e1*18;// 1 dollar
 address [] public funders; 
