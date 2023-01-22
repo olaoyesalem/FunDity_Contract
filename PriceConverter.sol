@@ -9,7 +9,6 @@ library PriceConverter{
     return uint256(price*1e10);
     }
     
-
     function getConversionRate(uint256 eth_Amount, AggregatorV3Interface priceFeed)internal view returns(uint256){
        uint256 ethPrice = getPrice(priceFeed);
        uint256 ethAmountInUSD = (ethPrice* eth_Amount)/10**18;
