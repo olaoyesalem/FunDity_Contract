@@ -1,5 +1,8 @@
 //SPDX-License-Identifier:MIT
 pragma solidity ^0.8.7;
+import "@chainlink/contracts/src/v0.8/interfaces/AggregatorV3Interface.sol";
+import "./PriceConverter.sol";
+
 
 /**
  @title A contract for crowd funding
@@ -9,14 +12,17 @@ pragma solidity ^0.8.7;
  */
  
 contract CrowdFund{
+    using PriceConverter for uint256;
 
 address immutable i_owner;
 uint256 constant MINIMUM_USD = 1e1*18;// 1 dollar
 address [] public funders; 
 mapping(address=>uint256) public addressToAmountFunded;
+AggregatorV3Interface public priceFeed;
 
-constructor(){
+constructor(address priceFeedAddress){
     i_owner = msg.sender;
+    priceFeed = AggregatorV3Interface(priceFeedAddress);
 }
 
 modifier onlyOwner(){
@@ -24,7 +30,8 @@ modifier onlyOwner(){
     _;
 }
 modifier sendError(){
-require(msg.value>=MINIMUM_USD, "Send More Eth");
+
+require(msg.value.getConversionRate(priceFeed)>=MINIMUM_USD, "Send More Eth");
 _;
 }
 
