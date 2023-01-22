@@ -60,6 +60,10 @@ _;
     fallback()external payable{
         Fund();
     }
+    function getPrice() public view returns(uint256){
+          (,int256 price,,,)=priceFeed.latestRoundData();
+    return uint256(price*1e10);
+    }
 
 }
 
